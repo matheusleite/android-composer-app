@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
@@ -33,7 +34,9 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 fun Counter(count: Int, updateCount: (Int) -> Unit) {
-    Button(onClick = { updateCount(count+1) }) {
+    Button(
+        onClick = { updateCount(count+1) },
+        backgroundColor = if (count > 5 ) Color.Green else Color.Blue) {
         Text(text = "I've been clicked $count times")
     }
 }
@@ -42,12 +45,14 @@ fun Counter(count: Int, updateCount: (Int) -> Unit) {
 fun MyScreenContent(names: List<String> = listOf("Android", "Composer")) {
     val counterState = remember { mutableStateOf(0) }
 
-    Column {
-        for (name in names) {
-            Greeting(name = name)
-            Divider(color = Color.Black)
+    Column(modifier = androidx.compose.ui.Modifier.fillMaxHeight()) {
+        Column(modifier = androidx.compose.ui.Modifier.weight(1f)) {
+            for (name in names) {
+                Greeting(name = name)
+                Divider(color = Color.Black)
+            }
         }
-        Divider(color = Color.Transparent, thickness = 32.dp)
+
         Counter(
             count = counterState.value,
             updateCount = { newCount ->
@@ -68,7 +73,12 @@ fun MyApp(content: @Composable () -> Unit) {
 
 @Composable
 fun Greeting(name: String) {
-    Text(text = "Hello $name!", color = Color.Blue, modifier = androidx.compose.ui.Modifier.padding(26.dp))
+    Text(
+        text = "Hello $name!",
+        color = Color.Blue,
+        modifier = androidx.compose.ui.Modifier.padding(26.dp),
+        style = MaterialTheme.typography.h1
+    )
 }
 
 @Preview(showBackground = true)
